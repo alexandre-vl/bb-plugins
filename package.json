@@ -1,0 +1,25 @@
+{
+  "name": "bb-plugins",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22",
+    "npm": ">=11"
+  },
+  "workspaces": [
+    "plugins/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm test --workspaces",
+    "check:catalog": "node scripts/check-catalog.mjs",
+    "check:git-install": "node scripts/check-git-install.mjs",
+    "check:tag": "node scripts/check-tag.mjs"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.10.0": true
+  }
+}

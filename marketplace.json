@@ -1,0 +1,36 @@
+{
+  "$schema": "https://getbb.app/schemas/marketplace-v2.schema.json",
+  "schemaVersion": 2,
+  "name": "alexandre-vl",
+  "displayName": "alexandre-vl plugins",
+  "description": "Plugins and plugin forks maintained by alexandre-vl. Not reviewed by BB.",
+  "plugins": [
+    {
+      "id": "github-inbox",
+      "displayName": "GitHub Inbox",
+      "description": "A pull request inbox that says what each one needs next.",
+      "icon": {
+        "url": "./icons/github-inbox.svg"
+      },
+      "tags": [
+        "github",
+        "pull-requests",
+        "reviews"
+      ],
+      "author": {
+        "name": "Alexandre Vargas Lopez",
+        "github": "alexandre-vl"
+      },
+      "category": "code-and-reviews",
+      "source": {
+        "git": {
+          "url": "https://github.com/alexandre-vl/bb-plugins.git",
+          "subdir": "plugins/github-inbox",
+          "range": "^1.0.0",
+          "tagPrefix": "github-inbox/"
+        }
+      },
+      "overview": "See the open issues and pull requests of your repositories inside bb. Hand one to an agent with one click.\n\n## What you get\n\n- A pull request inbox of what needs you: reviews requested from you, then your own pull requests that are ready to merge, need fixing, or are in progress, each with its reason in words. Switch between Inbox, Mine, All, Merged, and Issues, filter with chips, snooze what can wait, and drive it all from the keyboard or, on a phone, with a long press.\n- Pull request details beside the list: a card that says what to do now and does it (merge with the repository's method, re-run the failed checks, mark a draft ready, reopen), then Activity with a comment box, Files, and Checks with their logs.\n- A status pill to mark a pull request ready, turn it into a draft, close, or reopen it, with Undo.\n- Start an agent on a pull request or an issue with bb's composer, seeded with what your pull request needs or a review of someone else's, and placed in the bb worktree already on the branch or a new one. The thread is linked to it.\n- The home page lists what needs you, and the panel's badge counts it. A thread's GitHub Inbox panel shows its pull request.\n- Issues with details: body, comments, a comment box, and editing of status, assignees, and labels.\n- Mentions. Type `@` or `#` in any composer to attach an issue or pull request. Its title, body, and state go to the agent at send time.\n\n## How it works\n\nThe plugin tracks every bb project whose checkout has a GitHub `origin` remote. Add more repositories in the Extra repositories setting as a comma-separated `owner/repo` list. Choose a Default project for repositories that are not attached to a project. A background service refreshes the cache at startup, then waits 15 minutes after each completed sync to reduce background GitHub traffic. Press Refresh in the panel to update now.\n\n## For agents\n\nThe `bb github-inbox` command lists cached data. Use `bb github-inbox repos`, `bb github-inbox issues [owner/repo]`, `bb github-inbox prs [owner/repo]`, or `bb github-inbox sync`. `bb github-inbox prs` also says what each pull request needs next. `bb github-inbox pr-state <owner/repo> <number> --state open|draft|closed` marks a pull request ready, turns it into a draft, closes it, or reopens it. `merge`, `rerun`, `snooze`, and `unsnooze` do what the panel does. `agent` starts a thread on a pull request or issue in the project's default environment and checks the pull request's branch out there, while the panel reuses the worktree that holds the branch or creates one. Every command accepts `--json`, and `bb github-inbox --help` or `bb github-inbox <command> --help` prints the arguments and options and exits 0.\n\n## Requirements\n\nThe GitHub CLI must be installed and signed in with `gh auth login`. See https://cli.github.com for installation. The plugin uses your `gh` session and stores no tokens. Until `gh auth status` passes, the plugin reports that it needs configuration.\n\n## About this fork\n\nThis is a fork of bb's GitHub plugin that carries the pull request inbox from [get-bb/bb#6037](https://github.com/get-bb/bb/pull/6037) ([#5867](https://github.com/get-bb/bb/issues/5867)) under the id `github-inbox`. It is maintained by alexandre-vl and not reviewed by BB. It starts with empty data: bb keeps plugin data per id, so the bundled plugin's cache, snoozes, thread links, and settings are not shared. Turn the bundled plugin off with `bb plugin disable github` so `@` and `#` do not offer every item twice."
+    }
+  ]
+}

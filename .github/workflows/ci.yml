@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["*/v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NPM_VERSION: 11.16.0
+  BB_APP_VERSION: 0.46.2-nightly.39620384282.1
+
+jobs:
+  plugins:
+    name: Install, typecheck, test, and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Install npm and the bb CLI
+        run: |
+          npm install -g "npm@${NPM_VERSION}"
+          npm install -g --ignore-scripts "bb-app@${BB_APP_VERSION}"
+          echo "npm $(npm --version), bb $(bb --version)"
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Check the catalog
+        run: node scripts/check-catalog.mjs
+
+      - name: Typecheck
+        run: npm run typecheck --workspaces
+
+      - name: Test
+        run: npm test --workspaces
+
+      - name: Build
+        run: npm run build --workspaces
+
+      - name: Install and build each plugin the way bb's git install does
+        run: node scripts/check-git-install.mjs
+
+  tag:
+    name: Tag matches the plugin version
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Compare the tag with plugins/<id>/package.json
+        run: node scripts/check-tag.mjs "$GITHUB_REF_NAME"
